@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Profile</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<h2 align="center">👤 My Profile</h2>
+
+<div class="profile-box">
+
+<h2>{{ user[1] }}</h2>
+
+<p>📱 Mobile : {{ user[2] }}</p>
+
+<p>🏠 Address : {{ user[3] }}</p>
+
+<p>📮 Pincode : {{ user[4] }}</p>
+
+<p>👤 Username : {{ user[5] }}</p>
+
+<a href="/products" class="btn">
+Continue Shopping
+</a>
+
+</div>
+
+</body>
+</html>

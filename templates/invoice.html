@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+
+    <style>
+
+        body{
+            background:#f4f4f4;
+            font-family:Arial,sans-serif;
+        }
+
+        .invoice{
+            width:800px;
+            margin:30px auto;
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px gray;
+        }
+
+        h1,h2{
+            text-align:center;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table th{
+            background:#2196F3;
+            color:white;
+            padding:10px;
+        }
+
+        table td{
+            border:1px solid #ddd;
+            padding:10px;
+            text-align:center;
+        }
+
+        .total{
+            text-align:right;
+            font-size:22px;
+            margin-top:20px;
+            font-weight:bold;
+        }
+
+        .btn{
+            text-align:center;
+            margin-top:25px;
+        }
+
+        button{
+            padding:12px 25px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            color:white;
+            font-size:16px;
+        }
+
+        .print{
+            background:#28a745;
+        }
+
+        .continue{
+            background:#2196F3;
+        }
+
+        #successMsg{
+            display:none;
+            margin-top:30px;
+            text-align:center;
+        }
+
+        @media print{
+
+            .btn,
+            #successMsg{
+                display:none !important;
+            }
+
+            body{
+                background:white;
+            }
+
+            .invoice{
+                width:100%;
+                margin:0;
+                box-shadow:none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="invoice">
+
+<h1>🛒 Online Shopping System</h1>
+
+<h2>Invoice</h2>
+
+<hr>
+
+<p><b>Invoice No :</b> {{ order_id }}</p>
+
+<p><b>Customer :</b> {{ customer }}</p>
+
+<p><b>Delivery Address :</b> {{ address }}</p>
+
+<p><b>Payment Method :</b> {{ payment }}</p>
+
+<hr>
+
+<table>
+
+<tr>
+<th>Product</th>
+<th>Quantity</th>
+<th>Price</th>
+<th>Total</th>
+</tr>
+
+{% for item in cart %}
+
+<tr>
+
+<td>{{ item.name }}</td>
+<td>{{ item.qty }}</td>
+<td>₹{{ item.price }}</td>
+<td>₹{{ item.price * item.qty }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="total">
+
+Grand Total : ₹{{ total }}
+
+</div>
+
+<div class="btn">
+
+<button class="print" onclick="printInvoice()">
+🖨 Print Invoice
+</button>
+
+</div>
+
+<div id="successMsg">
+
+<h2 style="color:green;">
+✅ Order Placed Successfully!
+</h2>
+
+<p>Thank You For Shopping With Us.</p>
+
+<a href="/products">
+<button class="continue">
+🛒 Continue Shopping
+</button>
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function printInvoice(){
+
+    window.print();
+
+    setTimeout(function(){
+
+        document.getElementById("successMsg").style.display="block";
+
+    },500);
+
+}
+
+</script>
+
+</body>
+</html>

@@ -11,7 +11,7 @@ app.secret_key = "shopping123"
 conn = mysql.connector.connect(
     host="127.0.0.1",
     user="****",
-    password="",
+    password="*****",
     database="online_shopping"
 )
 
@@ -91,9 +91,14 @@ def login():
 
         user = cursor.fetchone()
 
+        print(user)   # Debug
+
         if user:
 
-            session["user"] = user[1]
+            session["user"] = user[5]
+            session["name"] = user[1]
+
+            print(session)
 
             return redirect("/products")
 
@@ -234,7 +239,8 @@ def buy():
         payment = request.form["payment"]
         address = request.form["address"]
 
-        customer = session.get("user")
+        customer = session.get("name")
+        print(session)
 
         # Save Order
         for item in cart:
@@ -242,8 +248,8 @@ def buy():
             cursor.execute(
                 """
                 INSERT INTO orders
-                (customer_name, product_name, quantity, total, payment, address)
-                VALUES(%s,%s,%s,%s,%s,%s)
+                (customer_name, product_name, quantity, total, payment, address, status)
+                VALUES(%s,%s,%s,%s,%s,%s,%s)
                 """,
                 (
                     customer,
@@ -251,11 +257,11 @@ def buy():
                     item["qty"],
                     item["price"] * item["qty"],
                     payment,
-                    address
+                    address,
+                    "Pending"
                 )
             )
 
-            # Update Stock
             cursor.execute(
                 """
                 UPDATE products
@@ -269,21 +275,186 @@ def buy():
             )
 
         conn.commit()
+        cursor.execute("SELECT MAX(order_id) FROM orders")
+        order_id = cursor.fetchone()[0]
+
+        print("Order ID =", order_id)
+
+
+
+
+        cursor.execute("SELECT MAX(order_id) FROM orders")
+        order_id = cursor.fetchone()[0]
 
         session["cart"] = []
 
         return render_template(
-            "orders.html",
+            "invoice.html",
+            order_id=order_id,
+            customer=customer,
+            cart=cart,
             total=total,
-            payment=payment
+            payment=payment,
+            address=address
         )
 
+    # GET Request
     return render_template(
         "buy.html",
         cart=cart,
         total=total
     )
 
+    
+
+
+# ===============================
+# Run Flask App
+# ===============================
+
+
+
+
+
+
+
+
+
+    # ===============================
+# Profile
+# ===============================
+
+@app.route("/profile")
+def profile():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    cursor.execute(
+        "SELECT * FROM customers WHERE username=%s",
+        (session["user"],)
+    )
+
+    user = cursor.fetchone()
+
+    return render_template("profile.html", user=user)
+
+
+# ===============================
+# Admin Login
+# ===============================
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        cursor.execute(
+            "SELECT * FROM admin WHERE username=%s AND password=%s",
+            (username, password)
+        )
+
+        admin = cursor.fetchone()
+
+        if admin:
+            session["admin"] = admin[1]
+            return redirect("/dashboard")
+
+        return "Invalid Admin Login"
+
+    return render_template("admin_login.html")
+
+# ===============================
+# Dashboard
+# ===============================
+
+
+
+
+
+@app.route("/dashboard")
+def dashboard():
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    cursor.execute("SELECT COUNT(*) FROM customers")
+    customers = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM products")
+    products = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM orders")
+    orders = cursor.fetchone()[0]
+
+    # Product List
+    cursor.execute("SELECT * FROM products")
+    product_list = cursor.fetchall()
+
+    # Order List
+    cursor.execute("SELECT * FROM orders")
+    order_list = cursor.fetchall()
+
+    print(order_list)   # Debug
+
+    return render_template(
+        "admin_dashboard.html",
+        customers=customers,
+        products=products,
+        orders=orders,
+        product_list=product_list,
+        order_list=order_list
+    )
+@app.route("/add_product", methods=["GET", "POST"])
+def add_product():
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    if request.method == "POST":
+
+        pid = request.form["pid"]
+        name = request.form["name"]
+        price = request.form["price"]
+        stock = request.form["stock"]
+
+        cursor.execute(
+            """
+            INSERT INTO products(pid, name, price, stock)
+            VALUES(%s,%s,%s,%s)
+            """,
+            (pid, name, price, stock)
+        )
+
+        conn.commit()
+
+        return redirect("/dashboard")
+
+    return render_template("add_product.html")
+
+@app.route("/update_status/<int:order_id>", methods=["POST"])
+def update_status(order_id):
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    status = request.form["status"]
+
+    print("Order ID:", order_id)
+    print("Status:", status)
+
+
+    cursor.execute(
+        "UPDATE orders SET status=%s WHERE order_id=%s",
+        (status, order_id)
+    )
+
+    conn.commit()
+
+    return redirect("/dashboard")
 
 # ===============================
 # Run Flask App
@@ -291,10 +462,3 @@ def buy():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-
-
-
-
-    

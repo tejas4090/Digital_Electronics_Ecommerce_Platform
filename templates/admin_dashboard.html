@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1 style="text-align:center;">📊 Admin Dashboard</h1>
+
+<div class="dashboard">
+
+    <div class="card">
+        <h2>{{ customers }}</h2>
+        <p>Total Customers</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ products }}</h2>
+        <p>Total Products</p>
+    </div>
+
+    <div class="card">
+        <h2>{{ orders }}</h2>
+        <p>Total Orders</p>
+    </div>
+
+</div>
+<a href="/add_product" class="btn">➕ Add Product</a>
+
+<h2 class="title">📦 Product List</h2>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+    <th>Product ID</th>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Stock</th>
+</tr>
+
+{% for p in product_list %}
+
+<tr>
+    <td>{{ p[0] }}</td>
+    <td>{{ p[1] }}</td>
+    <td>₹{{ p[2] }}</td>
+    <td>{{ p[3] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<h2 class="title">📦 Order Management</h2>
+
+<div class="table-container">
+
+<table>
+
+<tr>
+    <th>Order ID</th>
+    <th>Customer</th>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Total</th>
+    <th>Payment</th>
+    <th>Status</th>
+</tr>
+
+{% for o in order_list %}
+
+<tr>
+    <td>{{ o[0] }}</td>
+    <td>{{ o[1] }}</td>
+    <td>{{ o[2] }}</td>
+    <td>{{ o[3] }}</td>
+    <td>₹{{ o[4] }}</td>
+    <td>{{ o[5] }}</td>
+    <td>
+
+<form action="/update_status/{{ o[0] }}" method="POST">
+
+<select name="status">
+    <option>Pending</option>
+    <option>Confirmed</option>
+    <option>Shipped</option>
+    <option>Out for Delivery</option>
+    <option>Delivered</option>
+</select>
+
+<button type="submit">Update</button>
+
+</form>
+
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+</html>
