@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Successful</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="/products">Products</a>
+
+        <a href="/logout">Logout</a>
+
+    </nav>
+
+</header>
+
+<div class="success-box">
+
+    <h1>🎉 Order Placed Successfully!</h1>
+
+    <p>
+        Thank you for shopping with us.
+    </p>
+
+    <hr>
+
+    <h2>Order Details</h2>
+
+    <p>
+        <b>Total Amount :</b>
+        ₹ {{ total }}
+    </p>
+
+    <p>
+        <b>Payment Method :</b>
+        {{ payment }}
+    </p>
+
+    <p>
+        <b>Status :</b>
+        Confirmed
+    </p>
+
+    <br>
+
+    <a href="/products">
+
+        <button class="buy-btn">
+
+            Continue Shopping
+
+        </button>
+
+    </a>
+
+</div>
+
+<footer>
+
+<p>
+
+© 2026 Online Shopping System
+
+</p>
+
+</footer>
+
+</body>
+</html>

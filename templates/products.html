@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/cart">Cart</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+</header>
+
+<h1 class="page-title">Available Products</h1>
+
+<div class="product-container">
+
+{% for product in products %}
+
+<div class="product-card">
+
+    <img src="https://via.placeholder.com/200x150"
+         alt="{{ product[1] }}">
+
+    <h2>{{ product[1] }}</h2>
+
+    <h3>₹ {{ product[2] }}</h3>
+
+    <p>Stock Available: {{ product[3] }}</p>
+
+    <form action="/add_to_cart" method="POST">
+
+        <input
+            type="hidden"
+            name="pid"
+            value="{{ product[0] }}">
+
+        <label>Quantity</label>
+
+        <input
+            type="number"
+            name="qty"
+            value="1"
+            min="1"
+            max="{{ product[3] }}"
+            required>
+
+        <button type="submit">
+            Add To Cart
+        </button>
+
+    </form>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<footer>
+
+<p>
+© 2026 Online Shopping System
+</p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+    </nav>
+
+</header>
+
+<div class="form-container">
+
+    <h2>Customer Registration</h2>
+
+    <form action="/register" method="POST">
+
+        <input
+        type="text"
+        name="name"
+        placeholder="Enter Full Name"
+        required>
+
+        <input
+        type="text"
+        name="mobile"
+        placeholder="Enter Mobile Number"
+        required>
+
+        <input
+        type="text"
+        name="address"
+        placeholder="Enter Address"
+        required>
+
+        <input
+        type="text"
+        name="pincode"
+        placeholder="Enter Pincode"
+        required>
+
+        <input
+        type="text"
+        name="username"
+        placeholder="Create Username"
+        required>
+
+        <input
+        type="password"
+        name="password"
+        placeholder="Create Password"
+        required>
+
+        <button type="submit">
+            Register
+        </button>
+
+    </form>
+
+    <p>
+        Already have an account?
+        <a href="/login">Login Here</a>
+    </p>
+
+</div>
+
+<footer>
+
+    <p>
+        © 2026 Online Shopping System
+    </p>
+
+</footer>
+
+</body>
+</html>

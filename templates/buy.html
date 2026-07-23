@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+
+        <a href="/">Home</a>
+        <a href="/products">Products</a>
+        <a href="/cart">Cart</a>
+
+    </nav>
+
+</header>
+
+<h1 class="page-title">
+    Checkout
+</h1>
+
+<div class="checkout-box">
+
+<h2>Order Summary</h2>
+
+<table class="cart-table">
+
+<tr>
+
+<th>Product</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Total</th>
+
+</tr>
+
+{% for item in cart %}
+
+<tr>
+
+<td>{{ item.name }}</td>
+
+<td>₹ {{ item.price }}</td>
+
+<td>{{ item.qty }}</td>
+
+<td>₹ {{ item.price * item.qty }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<h2>
+Grand Total : ₹ {{ total }}
+</h2>
+
+<form action="/buy" method="POST">
+
+<label><b>Delivery Address</b></label>
+
+<textarea
+name="address"
+rows="4"
+placeholder="Enter Delivery Address"
+required></textarea>
+
+<br><br>
+
+<label><b>Select Payment Method</b></label>
+
+<br><br>
+
+<input
+type="radio"
+name="payment"
+value="Cash On Delivery"
+required>
+
+Cash On Delivery
+
+<br><br>
+
+<input
+type="radio"
+name="payment"
+value="UPI">
+
+UPI
+
+<br><br>
+
+<input
+type="radio"
+name="payment"
+value="Card">
+
+Credit / Debit Card
+
+<br><br>
+
+<button
+type="submit"
+class="buy-btn">
+
+Place Order
+
+</button>
+
+</form>
+
+</div>
+
+<footer>
+
+<p>
+
+© 2026 Online Shopping System
+
+</p>
+
+</footer>
+
+</body>
+</html>

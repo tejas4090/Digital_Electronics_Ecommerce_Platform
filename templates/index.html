@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shopping System</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+
+        <a href="/">Home</a>
+
+        <a href="/products">Products</a>
+
+        <a href="/login">Login</a>
+
+        <a href="/register">Register</a>
+
+    </nav>
+
+</header>
+
+<section class="hero">
+
+    <h1>Welcome to Online Shopping System</h1>
+
+    <p>
+        Buy Laptops, Mobiles, Headphones,
+        Keyboards, Mouse and many more
+        at the best prices.
+    </p>
+
+    <a href="/products">
+        <button>Shop Now</button>
+    </a>
+
+</section>
+
+<section class="features">
+
+    <div class="feature-box">
+
+        <h2>🚚 Fast Delivery</h2>
+
+        <p>Quick delivery all over India.</p>
+
+    </div>
+
+    <div class="feature-box">
+
+        <h2>💳 Secure Payment</h2>
+
+        <p>UPI, Card and Cash on Delivery.</p>
+
+    </div>
+
+    <div class="feature-box">
+
+        <h2>⭐ Best Quality</h2>
+
+        <p>Trusted products at affordable prices.</p>
+
+    </div>
+
+</section>
+
+<footer>
+
+    <p>
+        © 2026 Online Shopping System |
+        Developed using Flask + MySQL
+    </p>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+        🛒 Online Shopping
+    </div>
+
+    <nav>
+
+        <a href="/">Home</a>
+        <a href="/products">Products</a>
+        <a href="/logout">Logout</a>
+
+    </nav>
+
+</header>
+
+<h1 class="page-title">
+    🛒 Shopping Cart
+</h1>
+
+{% if cart %}
+
+<table class="cart-table">
+
+<tr>
+
+<th>Product</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Total</th>
+<th>Action</th>
+
+</tr>
+
+{% for item in cart %}
+
+<tr>
+
+<td>{{ item.name }}</td>
+
+<td>₹ {{ item.price }}</td>
+
+<td>{{ item.qty }}</td>
+
+<td>₹ {{ item.price * item.qty }}</td>
+
+<td>
+
+<a href="/remove/{{ item.pid }}">
+
+<button class="remove-btn">
+
+Remove
+
+</button>
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<div class="total-box">
+
+<h2>
+
+Grand Total : ₹ {{ total }}
+
+</h2>
+
+<a href="/buy">
+
+<button class="buy-btn">
+
+Proceed To Checkout
+
+</button>
+
+</a>
+
+</div>
+
+{% else %}
+
+<h2 class="empty-cart">
+
+Your Cart is Empty
+
+</h2>
+
+<center>
+
+<a href="/products">
+
+<button>
+
+Continue Shopping
+
+</button>
+
+</a>
+
+</center>
+
+{% endif %}
+
+<footer>
+
+<p>
+
+© 2026 Online Shopping System
+
+</p>
+
+</footer>
+
+</body>
+</html>
