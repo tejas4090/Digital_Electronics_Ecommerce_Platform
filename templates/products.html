@@ -13,7 +13,7 @@
 <header>
 
     <div class="logo">
-        🛒 Online Shopping
+        🛒 Digital Electronics
     </div>
 
 <nav>
@@ -23,6 +23,8 @@
 <a href="/products">🛍 Products</a>
 
 <a href="/cart">🛒 Cart</a>
+
+<a href="/track_order">📦 Track Order</a>
 
 <a href="/profile">👤 Profile</a>
 
@@ -36,18 +38,52 @@
 
 <h1 class="page-title">Available Products</h1>
 
+<form action="/products" method="GET" class="search-form">
+
+    <input
+        type="text"
+        name="search"
+        placeholder="Search Product..."
+        value="{{ search }}">
+
+    <button type="submit">🔍 Search</button>
+
+</form>
+
+<br>
+
+{% if products|length == 0 %}
+
+<h2 class="no-product">
+    No Product Found
+</h2>
+
+{% endif %}
+
 <div class="product-container">
 
 {% for product in products %}
 
 <div class="product-card">
 
-    <img src="https://via.placeholder.com/200x150"
-         alt="{{ product[1] }}">
+   <a href="/product/{{ product[0] }}">
+    <img
+        src="{{ url_for('static', filename='images/' + product[5]) }}"
+        alt="{{ product[1] }}"
+        class="product-image">
+</a>
 
-    <h2>{{ product[1] }}</h2>
+    <h2>
+    <a href="/product/{{ product[0] }}" class="product-link">
+        {{ product[1] }}
+    </a>
+</h2>
 
     <h3>₹ {{ product[2] }}</h3>
+
+    <p class="rating">
+    ⭐ {{ product[6] }}/5 ({{ product[7] }} Reviews)
+</p>
 
     <p>Stock Available: {{ product[3] }}</p>
 
@@ -83,7 +119,7 @@
 <footer>
 
 <p>
-© 2026 Online Shopping System
+© 2026 Digital Electronics E-Commerce Platform
 </p>
 
 </footer>

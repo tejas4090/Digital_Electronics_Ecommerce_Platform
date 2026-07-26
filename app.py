@@ -10,8 +10,8 @@ app.secret_key = "shopping123"
 
 conn = mysql.connector.connect(
     host="127.0.0.1",
-    user="****",
-    password="*****",
+    user="root",
+    password="root@123",
     database="online_shopping"
 )
 
@@ -36,6 +36,7 @@ def register():
 
         name = request.form["name"]
         mobile = request.form["mobile"]
+        email = request.form["email"]
         address = request.form["address"]
         pincode = request.form["pincode"]
         username = request.form["username"]
@@ -43,13 +44,14 @@ def register():
 
         sql = """
         INSERT INTO customers
-        (name,mobile,address,pincode,username,password)
-        VALUES(%s,%s,%s,%s,%s,%s)
+        (name,mobile,email,address,pincode,username,password)
+        VALUES(%s,%s,%s,%s,%s,%s,%s)
         """
 
         values = (
             name,
             mobile,
+            email,
             address,
             pincode,
             username,
@@ -95,8 +97,8 @@ def login():
 
         if user:
 
-            session["user"] = user[5]
-            session["name"] = user[1]
+            session["user"] = user[6]   # Username
+            session["name"] = user[1]   # Name
 
             print(session)
 
@@ -115,15 +117,52 @@ def login():
 @app.route("/products")
 def products():
 
-    cursor.execute("SELECT * FROM products")
+    if "user" not in session:
+        return redirect("/login")
+
+    search = request.args.get("search", "")
+
+    if search:
+
+        cursor.execute("""
+             SELECT * FROM products
+            WHERE name LIKE %s
+            """, ("%" + search + "%",))
+
+    else:
+
+        cursor.execute("SELECT * FROM products")
 
     products = cursor.fetchall()
 
     return render_template(
         "products.html",
-        products=products
+        products=products,
+        search=search
     )
 
+@app.route("/product/<int:pid>")
+def product_details(pid):
+
+    cursor.execute(
+        "SELECT * FROM products WHERE pid=%s",
+        (pid,)
+    )
+
+    product = cursor.fetchone()
+
+    cursor.execute(
+        "SELECT * FROM reviews WHERE product_id=%s",
+        (pid,)
+    )
+    reviews = cursor.fetchall()
+
+    return render_template(
+    "product_details.html",
+    product=product,
+    reviews=reviews
+                )
+    
 
 # ===============================
 # Add To Cart
@@ -163,6 +202,28 @@ def add_to_cart():
     session["cart"] = cart
 
     return redirect("/cart")
+
+@app.route("/add_review", methods=["POST"])
+def add_review():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    product_id = request.form["product_id"]
+    rating = request.form["rating"]
+    review = request.form["review"]
+    username = session["user"]
+
+    cursor.execute("""
+        INSERT INTO reviews
+        (product_id, username, rating, review)
+        VALUES (%s,%s,%s,%s)
+    """, (product_id, username, rating, review))
+
+    conn.commit()
+
+    return redirect("/product/" + product_id)
+    
 
 
 # ===============================
@@ -217,12 +278,43 @@ def logout():
     session.clear()
 
     return redirect("/")
+
+@app.route("/track_order")
+def track_order():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    cursor.execute(
+        """
+        SELECT order_id,
+               product_name,
+               quantity,
+               total,
+               payment,
+               status
+        FROM orders
+        WHERE customer_name=%s
+        ORDER BY order_id DESC
+        """,
+        (session["name"],)
+    )
+
+    orders = cursor.fetchall()
+
+    return render_template(
+        "track_order.html",
+        orders=orders
+    )
 # ===============================
 # Buy Now / Checkout
 # ===============================
 
 @app.route("/buy", methods=["GET", "POST"])
 def buy():
+
+    if "user" not in session:
+        return redirect("/login")
 
     cart = session.get("cart", [])
 
@@ -357,6 +449,8 @@ def admin():
             (username, password)
         )
 
+        
+
         admin = cursor.fetchone()
 
         if admin:
@@ -366,6 +460,22 @@ def admin():
         return "Invalid Admin Login"
 
     return render_template("admin_login.html")
+
+
+
+@app.route("/admin/customers")
+def admin_customers():
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    cursor.execute("SELECT * FROM customers")
+    customers = cursor.fetchall()
+
+    return render_template(
+        "admin_customers.html",
+        customers=customers
+    )
 
 # ===============================
 # Dashboard
@@ -398,8 +508,8 @@ def dashboard():
     cursor.execute("SELECT * FROM orders")
     order_list = cursor.fetchall()
 
-    print(order_list)   # Debug
 
+    
     return render_template(
         "admin_dashboard.html",
         customers=customers,
@@ -407,7 +517,10 @@ def dashboard():
         orders=orders,
         product_list=product_list,
         order_list=order_list
+        
     )
+
+
 @app.route("/add_product", methods=["GET", "POST"])
 def add_product():
 

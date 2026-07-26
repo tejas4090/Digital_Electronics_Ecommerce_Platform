@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ product[1] }}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <h1>Digital Electronics</h1>
+</header>
+
+<div class="details-container">
+
+    <div class="details-image">
+        <img src="{{ url_for('static', filename='images/' + product[5]) }}">
+    </div>
+
+    <div class="details-info">
+
+        <h1>{{ product[1] }}</h1>
+
+        <h2>₹ {{ product[2] }}</h2>
+
+        <h3 class="rating">
+            ⭐ {{ product[6] }}/5 ({{ product[7] }} Reviews)
+        </h3>
+
+        <p><b>Stock:</b> {{ product[3] }}</p>
+
+        <p>
+            High Quality Electronic Product.<br>
+            1 Year Warranty.<br>
+            Fast Delivery.<br>
+            Original Product.
+        </p>
+
+        <!-- Add To Cart Form -->
+        <form action="/add_to_cart" method="POST">
+
+            <input
+                type="hidden"
+                name="pid"
+                value="{{ product[0] }}">
+
+            <label>Quantity</label><br>
+
+            <input
+                type="number"
+                name="qty"
+                value="1"
+                min="1"
+                max="{{ product[3] }}">
+
+            <br><br>
+
+            <button type="submit">
+                Add To Cart
+            </button>
+
+        </form>
+
+        <hr>
+
+        <!-- Review Form -->
+        <h2>Write a Review</h2>
+
+        <form action="/add_review" method="POST">
+
+            <input
+                type="hidden"
+                name="product_id"
+                value="{{ product[0] }}">
+
+            <label>Rating</label><br>
+
+            <select name="rating">
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+            </select>
+
+            <br><br>
+
+            <textarea
+                name="review"
+                rows="4"
+                cols="40"
+                placeholder="Write your review..."
+                required></textarea>
+
+            <br><br>
+
+            <button type="submit">
+                Submit Review
+            </button>
+
+        </form>
+
+        <hr>
+
+        <!-- Customer Reviews -->
+        <h2>Customer Reviews</h2>
+
+        {% if reviews %}
+
+            {% for r in reviews %}
+
+            <div class="review-box">
+
+                <h4>{{ r[2] }}</h4>
+
+                <p>⭐ {{ r[3] }}/5</p>
+
+                <p>{{ r[4] }}</p>
+
+                <small>{{ r[5] }}</small>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No reviews yet. Be the first to review this product.</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

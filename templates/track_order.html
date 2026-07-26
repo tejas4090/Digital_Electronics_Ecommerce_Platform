@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Order</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2 align="center">📦 My Orders</h2>
+
+<table border="1" align="center" cellpadding="10">
+
+<tr>
+    <th>Order ID</th>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Total</th>
+    <th>Payment</th>
+    <th>Status</th>
+</tr>
+
+{% for order in orders %}
+
+<tr>
+    <td>{{ order[0] }}</td>
+    <td>{{ order[1] }}</td>
+    <td>{{ order[2] }}</td>
+    <td>₹{{ order[3] }}</td>
+    <td>{{ order[4] }}</td>
+    <td>{{ order[5] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

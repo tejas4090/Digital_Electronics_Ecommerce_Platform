@@ -5,6 +5,7 @@
 
     <link rel="stylesheet"
     href="{{ url_for('static', filename='style.css') }}">
+    
 </head>
 
 <body>
@@ -29,9 +30,24 @@
     </div>
 
 </div>
-<a href="/add_product" class="btn">➕ Add Product</a>
 
+<div class="admin-buttons">
+
+    <a href="/admin/customers">
+        <button type="button" class="admin-btn">
+            👥 View Customers
+        </button>
+    </a>
+
+    <a href="/add_product">
+        <button type="button" class="admin-btn">
+            ➕ Add Product
+        </button>
+    </a>
+
+</div>
 <h2 class="title">📦 Product List</h2>
+
 
 <div class="table-container">
 
@@ -98,6 +114,8 @@
 
 <button type="submit">Update</button>
 
+
+
 </form>
 
 </td>
@@ -108,6 +126,7 @@
 </table>
 
 </div>
+
 
 </body>
 </html>
