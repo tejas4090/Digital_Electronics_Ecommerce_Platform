@@ -11,7 +11,7 @@ app.secret_key = "shopping123"
 conn = mysql.connector.connect(
     host="127.0.0.1",
     user="****",
-    password="*****",
+    password="****",
     database="online_shopping"
 )
 
