@@ -55,7 +55,7 @@ Digital_Electronics_Ecommerce_Platform/
 ├── static/
 │   ├── style.css
 │   ├── images/
-│   └── script.js
+│   
 │
 ├── templates/
 │   ├── index.html
@@ -133,7 +133,7 @@ http://127.0.0.1:5000/
 
 Diploma in Computer Technology
 
-Government Polytechnic Solapur
+Government Polytechnic Pen 
 
 ---
 
