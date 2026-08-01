@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 def send_otp(receiver_email, otp, purpose="registration"):
 
     sender_email = "demo234409@gmail.com"
-    app_password = "tvmlabfggbbkcvfp"
+    app_password = "******"
 
     if purpose == "forgot":
         subject = "Forgot your Digital Electronics Password By OTP"
@@ -44,7 +44,7 @@ app.secret_key = "shopping123"
 def send_order_email(receiver_email, customer_name, total, payment, address):
 
     sender_email = "demo234409@gmail.com"
-    app_password = "tvmlabfggbbkcvfp"
+    app_password = "*******"
 
     body = f"""
 Hello {customer_name},
@@ -101,8 +101,8 @@ Digital Electronics E-Commerce Platform
 
 conn = mysql.connector.connect(
     host="127.0.0.1",
-    user="root",
-    password="root@123",
+    user="****",
+    password="*****",
     database="online_shopping"
 )
 
