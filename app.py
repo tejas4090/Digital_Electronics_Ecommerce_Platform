@@ -1,8 +1,99 @@
+import smtplib
+import random
+from email.mime.text import MIMEText
+
+#===============================
+
+def send_otp(receiver_email, otp, purpose="registration"):
+
+    sender_email = "demo234409@gmail.com"
+    app_password = "tvmlabfggbbkcvfp"
+
+    if purpose == "forgot":
+        subject = "Forgot your Digital Electronics Password By OTP"
+        body = f"Your OTP to reset your password is: {otp}"
+    else:
+        subject = "Digital Electronics OTP Verification"
+        body = f"Your OTP for registration is: {otp}"
+
+    msg = MIMEText(body)
+
+    msg["Subject"] = subject
+    msg["From"] = sender_email
+    msg["To"] = receiver_email
+
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(sender_email, app_password)
+
+    server.send_message(msg)
+
+    server.quit()
+    print("OTP Sent To Mail Successfully")
+
+
 from flask import Flask, render_template, request, redirect, session
 import mysql.connector
 
 app = Flask(__name__)
 app.secret_key = "shopping123"
+
+
+#===============================
+
+def send_order_email(receiver_email, customer_name, total, payment, address):
+
+    sender_email = "demo234409@gmail.com"
+    app_password = "tvmlabfggbbkcvfp"
+
+    body = f"""
+Hello {customer_name},
+
+🎉 Thank you for shopping with Digital Electronics E-Commerce Platform.
+
+Your order has been placed successfully.
+
+==============================
+Order Details
+==============================
+
+Customer Name : {customer_name}
+
+Total Amount : ₹{total}
+
+Payment Method : {payment}
+
+Delivery Address :
+{address}
+
+Order Status : Pending
+
+Thank you for shopping with us.
+
+Digital Electronics E-Commerce Platform
+"""
+
+    msg = MIMEText(body)
+
+    msg["Subject"] = "Order Confirmation"
+    msg["From"] = sender_email
+    msg["To"] = receiver_email
+
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(sender_email, app_password)
+    
+    
+
+    server.sendmail(
+        sender_email,
+        receiver_email,
+        msg.as_string()
+    )
+
+    server.quit()
+
+    
 
 # ===============================
 # MySQL Connection
@@ -10,8 +101,8 @@ app.secret_key = "shopping123"
 
 conn = mysql.connector.connect(
     host="127.0.0.1",
-    user="****",
-    password="****",
+    user="root",
+    password="root@123",
     database="online_shopping"
 )
 
@@ -42,37 +133,30 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
-        sql = """
-        INSERT INTO customers
-        (name,mobile,email,address,pincode,username,password)
-        VALUES(%s,%s,%s,%s,%s,%s,%s)
-        """
+        otp = random.randint(100000, 999999)
 
-        values = (
-            name,
-            mobile,
-            email,
-            address,
-            pincode,
-            username,
-            password
-        )
+        session["otp"] = str(otp)
 
-        try:
+        session["register_data"] = {
+            "name": name,
+            "mobile": mobile,
+            "email": email,
+            "address": address,
+            "pincode": pincode,
+            "username": username,
+            "password": password
+        }
 
-            cursor.execute(sql, values)
-            conn.commit()
+        print("Email from form:", email)
 
-            return redirect("/login")
+        send_otp(email, otp)
 
-        except mysql.connector.Error:
-            return "Username already exists!"
+        return redirect("/verify_otp")
 
     return render_template("register.html")
 
-# ===============================
-# Login
-# ===============================
+#--------------------------------
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -85,31 +169,170 @@ def login():
         cursor.execute(
             """
             SELECT * FROM customers
-            WHERE username=%s
-            AND password=%s
+            WHERE username=%s AND password=%s
             """,
             (username, password)
         )
 
         user = cursor.fetchone()
 
-        print(user)   # Debug
-
         if user:
 
-            session["user"] = user[6]   # Username
-            session["name"] = user[1]   # Name
-
-            print(session)
+            session["user"] = user[6]   # username
+            session["name"] = user[1]   # name
 
             return redirect("/products")
 
-        else:
-
-            return "Invalid Username or Password"
+        return render_template(
+    "login.html",
+    error="Invalid Username or Password!"
+)
 
     return render_template("login.html")
 
+#=============================
+
+@app.route("/forgot_password", methods=["GET", "POST"])
+def forgot_password():
+
+    if request.method == "POST":
+
+        email = request.form["email"].strip()
+
+        cursor.execute("SELECT * FROM customers")
+        users = cursor.fetchall()
+
+        print(users)
+
+        # Email Check
+        found = False
+
+        for user in users:
+            if user[3].strip().lower() == email.lower():
+                found = True
+                break
+
+        if found:
+
+            otp = random.randint(100000, 999999)
+
+            session["forgot_otp"] = str(otp)
+            session["forgot_email"] = email
+
+            send_otp(email, otp, "forgot")
+
+            return redirect("/forgot_verify_otp")
+
+        else:
+
+            return "Email Not Registered!"
+
+    return render_template("forgot_password.html")
+
+    #=============================
+
+@app.route("/forgot_verify_otp", methods=["GET", "POST"])
+def forgot_verify_otp():
+
+    if request.method == "POST":
+
+        user_otp = request.form["otp"]
+
+        if user_otp == session.get("forgot_otp"):
+
+            return redirect("/reset_password")
+
+        else:
+
+            return "Invalid OTP!"
+
+    return render_template("forgot_verify_otp.html")
+
+    #=============================
+
+@app.route("/reset_password", methods=["GET", "POST"])
+def reset_password():
+
+    if request.method == "POST":
+
+        new_password = request.form["password"]
+
+        email = session.get("forgot_email")
+
+        cursor.execute(
+            """
+            UPDATE customers
+            SET password=%s
+            WHERE email=%s
+            """,
+            (new_password, email)
+        )
+
+        conn.commit()
+
+        session.pop("forgot_otp", None)
+        session.pop("forgot_email", None)
+
+        return render_template("password_success.html")
+
+    return render_template("reset_password.html")
+
+#--------------------------------
+
+@app.route("/verify_otp", methods=["GET", "POST"])
+def verify_otp():
+
+    if request.method == "POST":
+
+        user_otp = request.form["otp"]
+        saved_otp = session.get("otp")
+
+        if saved_otp is None:
+            return "OTP Session Expired. Please Register Again."
+
+        if user_otp != saved_otp:
+            return "Invalid OTP!"
+
+        data = session.get("register_data")
+
+        if data is None:
+            return "Registration Data Not Found."
+
+        sql = """
+        INSERT INTO customers
+        (name, mobile, email, address, pincode, username, password)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """
+
+        values = (
+            data["name"],
+            data["mobile"],
+            data["email"],
+            data["address"],
+            data["pincode"],
+            data["username"],
+            data["password"]
+        )
+
+        try:
+
+            cursor.execute(sql, values)
+            conn.commit()
+            print("Customer Saved Successfully")
+
+
+            session.pop("otp", None)
+            session.pop("register_data", None)
+
+            print("Redirecting to Login...")    
+
+            return render_template("otp_success.html")
+
+        except mysql.connector.Error as e:
+            print("MYSQL ERROR:", e)
+            return f"MySQL Error: {e}"
+
+    return render_template("otp.html")  
 # ===============================
 # Products Page
 # ===============================
@@ -334,6 +557,19 @@ def buy():
         customer = session.get("name")
         print(session)
 
+        # Customer Email Get
+        cursor.execute(
+            "SELECT email FROM customers WHERE username=%s",
+            (session["user"],)
+        )
+
+        result = cursor.fetchone()
+
+        if result:
+            customer_email = result[0]
+        else:
+            customer_email = ""
+
         # Save Order
         for item in cart:
 
@@ -367,16 +603,28 @@ def buy():
             )
 
         conn.commit()
+
         cursor.execute("SELECT MAX(order_id) FROM orders")
         order_id = cursor.fetchone()[0]
 
         print("Order ID =", order_id)
 
-
-
-
         cursor.execute("SELECT MAX(order_id) FROM orders")
         order_id = cursor.fetchone()[0]
+
+        # ===============================
+        # Send Order Confirmation Email
+        # ===============================
+
+        if customer_email != "":
+
+            send_order_email(
+                customer_email,
+                customer,
+                total,
+                payment,
+                address
+            )
 
         session["cart"] = []
 
@@ -457,7 +705,10 @@ def admin():
             session["admin"] = admin[1]
             return redirect("/dashboard")
 
-        return "Invalid Admin Login"
+        return render_template(
+    "admin_login.html",
+    error="Invalid Admin Username or Password!"
+)
 
     return render_template("admin_login.html")
 

@@ -1107,3 +1107,344 @@ textarea{
 .profile-box p b{
     color:#333;
 }
+
+.login-box{
+    animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+.product-card{
+    transition:0.3s ease;
+}
+
+.product-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 15px 30px rgba(0,0,0,0.25);
+}
+
+button{
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+background:#ff6600;
+
+}
+
+.product img{
+
+transition:.4s;
+
+}
+
+.product img:hover{
+
+transform:scale(1.1);
+
+}   
+
+.login-box{
+
+animation:fade .8s;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+transform:translateY(30px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+.product-card{
+    transition:.3s;
+}
+
+.product-card:hover{
+
+transform:translateY(-10px);
+
+box-shadow:0 20px 40px rgba(0,0,0,.2);
+
+}
+
+.product-card{
+
+animation:float 4s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%,100%{
+transform:translateY(0);
+}
+
+50%{
+transform:translateY(-5px);
+}
+
+}
+
+/* ===========================
+   OTP Verification Page
+=========================== */
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f4f6f9;
+}
+
+.otp-container{
+
+    width:380px;
+
+    margin:90px auto;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:12px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.15);
+
+    text-align:center;
+
+    animation:fadeIn .7s ease;
+}
+
+.otp-container h2{
+
+    color:#0d6efd;
+
+    margin-bottom:10px;
+}
+
+.otp-container p{
+
+    color:#666;
+
+    font-size:15px;
+
+    margin-bottom:25px;
+}
+
+.otp-container input{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:18px;
+
+    text-align:center;
+
+    letter-spacing:6px;
+
+    outline:none;
+
+    transition:.3s;
+}
+
+.otp-container input:focus{
+
+    border-color:#0d6efd;
+
+    box-shadow:0 0 8px rgba(13,110,253,.3);
+}
+
+.otp-container button{
+
+    width:100%;
+
+    margin-top:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#0d6efd;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.otp-container button:hover{
+
+    background:#084298;
+
+    transform:translateY(-2px);
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+        transform:translateY(-30px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ===========================
+   Login Error Box
+=========================== */
+
+.error-box{
+    width:100%;
+    background:#ffe5e5;
+    color:#c62828;
+    border-left:6px solid #e53935;
+    padding:14px;
+    margin-bottom:18px;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    animation:shake .4s ease;
+}
+
+@keyframes shake{
+    0%{transform:translateX(0);}
+    25%{transform:translateX(-5px);}
+    50%{transform:translateX(5px);}
+    75%{transform:translateX(-5px);}
+    100%{transform:translateX(0);}
+}
+
+.forgot-password{
+    text-align:right;
+    margin:10px 0 20px;
+}
+
+.forgot-password a{
+    text-decoration:none;
+    color:#007bff;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.forgot-password a:hover{
+    text-decoration:underline;
+}
+
+.password-box{
+    position:relative;
+    width:100%;
+}
+
+.password-box input{
+    width:100%;
+    padding-right:45px;
+    box-sizing:border-box;
+}
+
+.eye{
+    position:absolute;
+    right:12px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:18px;
+    z-index:100;
+}
+
+.password-box{
+    position: relative;
+    width: 100%;
+}
+
+.password-box input{
+    width: 100%;
+    padding-right: 45px;
+    box-sizing: border-box;
+}
+
+.eye{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    user-select: none;
+}
+
+/* Admin Error Message */
+
+.admin-error{
+    background:#ffe5e5;
+    color:#c62828;
+    border-left:5px solid #ff5722;
+    padding:12px 15px;
+    margin:15px 0;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:600;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+
+    animation:shake 0.4s ease;
+}
+
+@keyframes shake{
+
+0%{transform:translateX(0);}
+25%{transform:translateX(-5px);}
+50%{transform:translateX(5px);}
+75%{transform:translateX(-5px);}
+100%{transform:translateX(0);}
+
+}

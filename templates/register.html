@@ -65,11 +65,16 @@
         placeholder="Create Username"
         required>
 
-        <input
-        type="password"
-        name="password"
-        placeholder="Create Password"
-        required>
+       <div class="password-box">
+    <input
+    type="password"
+    id="password"
+    name="password"
+    placeholder="Enter Password"
+    required>
+
+    <span class="eye" onclick="togglePassword()">👁️</span>
+</div>
 
         <button type="submit">
             Register
@@ -91,6 +96,18 @@
     </p>
 
 </footer>
+
+<script>
+function togglePassword(){
+    var x=document.getElementById("password");
+    x.type=(x.type==="password")?"text":"password";
+}
+
+function toggleConfirm(){
+    var x=document.getElementById("confirm_password");
+    x.type=(x.type==="password")?"text":"password";
+}
+</script>
 
 </body>
 </html>

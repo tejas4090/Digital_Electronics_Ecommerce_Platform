@@ -27,6 +27,13 @@
 
     <h2>Customer Login</h2>
 
+    <!-- Error Message -->
+    {% if error %}
+    <div class="error-box">
+        ❌ {{ error }}
+    </div>
+    {% endif %}
+
     <form action="/login" method="POST">
 
         <input
@@ -35,13 +42,22 @@
         placeholder="Enter Username"
         required>
 
-        <input
-        type="password"
-        name="password"
-        placeholder="Enter Password"
-        required>
+    <div class="password-box">
+    <input
+    type="password"
+    id="login_password"
+    name="password"
+    placeholder="Enter Password"
+    required>
 
-        <button type="submit">
+    <span class="eye" onclick="toggleLogin()">👁️</span>
+</div>
+
+        <div class="forgot-password">
+    <a href="/forgot_password">Forgot Password?</a>
+</div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
             Login
         </button>
 
@@ -57,10 +73,35 @@
 <footer>
 
     <p>
-        © 2026 Digital Electronics E-Commerce Platform 
+        © 2026 Digital Electronics E-Commerce Platform
     </p>
 
 </footer>
+
+<script>
+document.querySelector("form").addEventListener("submit", function () {
+    document.getElementById("loginBtn").innerHTML = "Logging In...";
+});
+</script>
+
+<script>
+setTimeout(function () {
+
+    let error = document.querySelector(".error-box");
+
+    if (error) {
+        error.style.display = "none";
+    }
+
+}, 3000);
+</script> 
+
+<script>
+function toggleLogin(){
+    var x=document.getElementById("login_password");
+    x.type=(x.type==="password")?"text":"password";
+}
+</script>
 
 </body>
 </html>
