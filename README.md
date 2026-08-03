@@ -29,6 +29,7 @@ The Digital Electronics E-Commerce Platform is a web-based application developed
 - View Customers
 - View Orders
 - Update Order Status
+- Add Products 
 
 ---
 
