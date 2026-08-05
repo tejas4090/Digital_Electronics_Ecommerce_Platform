@@ -4,6 +4,14 @@ from email.mime.text import MIMEText
 
 #===============================
 
+from flask import Flask, render_template, request, redirect, session
+import mysql.connector
+
+app = Flask(__name__)
+app.secret_key = "shopping123"
+
+#===============================
+
 def send_otp(receiver_email, otp, purpose="registration"):
 
     sender_email = "demo234409@gmail.com"
@@ -30,13 +38,6 @@ def send_otp(receiver_email, otp, purpose="registration"):
 
     server.quit()
     print("OTP Sent To Mail Successfully")
-
-
-from flask import Flask, render_template, request, redirect, session
-import mysql.connector
-
-app = Flask(__name__)
-app.secret_key = "shopping123"
 
 
 #===============================
@@ -784,13 +785,14 @@ def add_product():
         name = request.form["name"]
         price = request.form["price"]
         stock = request.form["stock"]
+        image = request.form["image"]
 
         cursor.execute(
             """
-            INSERT INTO products(pid, name, price, stock)
-            VALUES(%s,%s,%s,%s)
+            INSERT INTO products(pid, name, price, stock, image)
+            VALUES(%s,%s,%s,%s,%s)
             """,
-            (pid, name, price, stock)
+            (pid, name, price, stock, image)
         )
 
         conn.commit()
