@@ -34,18 +34,38 @@
 <div class="admin-buttons">
 
     <a href="/admin/customers">
-        <button type="button" class="admin-btn">
-            👥 View Customers
-        </button>
-    </a>
+    <button>👥 View Customers</button>
+</a>
 
-    <a href="/add_product">
-        <button type="button" class="admin-btn">
-            ➕ Add Product
-        </button>
-    </a>
+<a href="/add_product">
+    <button>➕ Add Product</button>
+</a>
+
+<!-- Product Management -->
+<div class="product-management">
+
+    <button type="button"
+            class="management-btn"
+            onclick="toggleProductMenu()">
+        ⚙️ Product Management ▾
+    </button>
+
+    <div class="management-menu" id="productMenu">
+
+        <a href="/update_product">
+            ✏️ Update Product
+        </a>
+
+        <a href="/delete_product">
+            🗑️ Delete Product
+        </a>
+
+    </div>
 
 </div>
+
+</div>
+
 <h2 class="title">📦 Product List</h2>
 
 
@@ -126,6 +146,14 @@
 </table>
 
 </div>
+
+<script>
+function toggleProductMenu() {
+    const menu = document.getElementById("productMenu");
+
+    menu.classList.toggle("show");
+}
+</script>
 
 
 </body>

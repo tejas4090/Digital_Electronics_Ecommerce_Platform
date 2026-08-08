@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Update Product</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<h1 class="title">✏️ Update Product</h1>
+
+<div class="table-container">
+
+<table>
+
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Action</th>
+    </tr>
+
+    {% for product in products %}
+
+    <tr>
+
+        <form method="POST">
+
+            <td>
+                {{ product[0] }}
+
+                <input type="hidden"
+                       name="pid"
+                       value="{{ product[0] }}">
+            </td>
+
+            <td>
+                <input type="text"
+                       name="name"
+                       value="{{ product[1] }}"
+                       required>
+            </td>
+
+            <td>
+                <input type="number"
+                       name="price"
+                       value="{{ product[2] }}"
+                       step="0.01"
+                       required>
+            </td>
+
+            <td>
+                <input type="number"
+                       name="stock"
+                       value="{{ product[3] }}"
+                       required>
+            </td>
+
+            <td>
+                <button type="submit">
+                    💾 Update
+                </button>
+            </td>
+
+        </form>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</div>
+
+<br>
+
+<div style="text-align:center;">
+
+    <a href="/dashboard">
+        <button>⬅ Back to Dashboard</button>
+    </a>
+
+</div>
+
+</body>
+</html>

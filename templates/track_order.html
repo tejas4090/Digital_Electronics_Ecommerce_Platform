@@ -4,13 +4,44 @@
     <title>Track Order</title>
     <link rel="stylesheet"
     href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body{
+            margin:0;
+            padding:20px;
+            text-align:center;
+        }
+
+        table{
+            margin:0 auto;
+            border-collapse:collapse;
+        }
+
+        .back-btn{
+            margin-top:20px;
+            text-align:center;
+        }
+
+        .back-btn button{
+            padding:10px 20px;
+            background:#0d6efd;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        }
+
+        .back-btn button:hover{
+            background:#0b5ed7;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2 align="center">📦 My Orders</h2>
+<h2>📦 My Orders</h2>
 
-<table border="1" align="center" cellpadding="10">
-
+<table border="1" cellpadding="10">
 <tr>
     <th>Order ID</th>
     <th>Product</th>
@@ -21,7 +52,6 @@
 </tr>
 
 {% for order in orders %}
-
 <tr>
     <td>{{ order[0] }}</td>
     <td>{{ order[1] }}</td>
@@ -30,10 +60,15 @@
     <td>{{ order[4] }}</td>
     <td>{{ order[5] }}</td>
 </tr>
-
 {% endfor %}
 
 </table>
 
+<div class="back-btn">
+    <a href="/">
+        <button>⬅ Back to Home</button>
+    </a>
+</div>
+
 </body>
-</html>
+</html>1

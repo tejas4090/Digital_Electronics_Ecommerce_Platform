@@ -15,7 +15,7 @@ app.secret_key = "shopping123"
 def send_otp(receiver_email, otp, purpose="registration"):
 
     sender_email = "demo234409@gmail.com"
-    app_password = "******"
+    app_password = "tvmlabfggbbkcvfp"
 
     if purpose == "forgot":
         subject = "Forgot your Digital Electronics Password By OTP"
@@ -45,7 +45,7 @@ def send_otp(receiver_email, otp, purpose="registration"):
 def send_order_email(receiver_email, customer_name, total, payment, address):
 
     sender_email = "demo234409@gmail.com"
-    app_password = "*******"
+    app_password = "tvmlabfggbbkcvfp"
 
     body = f"""
 Hello {customer_name},
@@ -54,9 +54,9 @@ Hello {customer_name},
 
 Your order has been placed successfully.
 
-==============================
+===============
 Order Details
-==============================
+===============
 
 Customer Name : {customer_name}
 
@@ -94,16 +94,14 @@ Digital Electronics E-Commerce Platform
 
     server.quit()
 
-    
-
 # ===============================
 # MySQL Connection
 # ===============================
 
 conn = mysql.connector.connect(
     host="127.0.0.1",
-    user="****",
-    password="*****",
+    user="root",
+    password="root@123",
     database="online_shopping"
 )
 
@@ -156,8 +154,9 @@ def register():
 
     return render_template("register.html")
 
-#--------------------------------
-
+# ===============================
+# Login
+# ===============================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -191,7 +190,9 @@ def login():
 
     return render_template("login.html")
 
-#=============================
+# ===============================
+#Forgot Password
+# ===============================
 
 @app.route("/forgot_password", methods=["GET", "POST"])
 def forgot_password():
@@ -230,7 +231,9 @@ def forgot_password():
 
     return render_template("forgot_password.html")
 
-    #=============================
+# ===============================
+# forgot Verify OTP
+# ===============================
 
 @app.route("/forgot_verify_otp", methods=["GET", "POST"])
 def forgot_verify_otp():
@@ -249,7 +252,9 @@ def forgot_verify_otp():
 
     return render_template("forgot_verify_otp.html")
 
-    #=============================
+# ===============================
+# reset Password
+# ===============================
 
 @app.route("/reset_password", methods=["GET", "POST"])
 def reset_password():
@@ -277,8 +282,9 @@ def reset_password():
         return render_template("password_success.html")
 
     return render_template("reset_password.html")
-
-#--------------------------------
+# ===============================
+#verify OTP
+# ===============================
 
 @app.route("/verify_otp", methods=["GET", "POST"])
 def verify_otp():
@@ -427,6 +433,10 @@ def add_to_cart():
 
     return redirect("/cart")
 
+# ===============================
+# Add Review
+# ===============================
+
 @app.route("/add_review", methods=["POST"])
 def add_review():
 
@@ -448,8 +458,6 @@ def add_review():
 
     return redirect("/product/" + product_id)
     
-
-
 # ===============================
 # View Cart
 # ===============================
@@ -469,7 +477,6 @@ def cart():
         cart=cart_items,
         total=total
     )
-
 
 # ===============================
 # Remove From Cart
@@ -491,7 +498,6 @@ def remove(pid):
 
     return redirect("/cart")
 
-
 # ===============================
 # Logout
 # ===============================
@@ -503,6 +509,9 @@ def logout():
 
     return redirect("/")
 
+# ===============================
+#   track order
+# ===============================
 @app.route("/track_order")
 def track_order():
 
@@ -512,11 +521,11 @@ def track_order():
     cursor.execute(
         """
         SELECT order_id,
-               product_name,
-               quantity,
-               total,
-               payment,
-               status
+        product_name,
+        quantity,
+        total,
+        payment,
+        status
         FROM orders
         WHERE customer_name=%s
         ORDER BY order_id DESC
@@ -646,25 +655,9 @@ def buy():
         total=total
     )
 
-    
-
-
 # ===============================
-# Run Flask App
-# ===============================
-
-
-
-
-
-
-
-
-
-    # ===============================
 # Profile
 # ===============================
-
 @app.route("/profile")
 def profile():
 
@@ -679,7 +672,6 @@ def profile():
     user = cursor.fetchone()
 
     return render_template("profile.html", user=user)
-
 
 # ===============================
 # Admin Login
@@ -713,7 +705,9 @@ def admin():
 
     return render_template("admin_login.html")
 
-
+# ===============================
+# Admin Customers 
+# ===============================
 
 @app.route("/admin/customers")
 def admin_customers():
@@ -732,10 +726,6 @@ def admin_customers():
 # ===============================
 # Dashboard
 # ===============================
-
-
-
-
 
 @app.route("/dashboard")
 def dashboard():
@@ -772,6 +762,9 @@ def dashboard():
         
     )
 
+# ===============================
+# Add product
+# ===============================
 
 @app.route("/add_product", methods=["GET", "POST"])
 def add_product():
@@ -801,6 +794,70 @@ def add_product():
 
     return render_template("add_product.html")
 
+# ===========================
+# UPDATE PRODUCT
+# ===========================
+
+@app.route("/update_product", methods=["GET", "POST"])
+def update_product():
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    if request.method == "POST":
+
+        pid = request.form["pid"]
+        name = request.form["name"]
+        price = request.form["price"]
+        stock = request.form["stock"]
+
+        cursor.execute("""
+            UPDATE products
+            SET name=%s, price=%s, stock=%s
+            WHERE pid=%s
+        """, (name, price, stock, pid))
+
+        conn.commit()
+
+        return redirect("/dashboard")
+
+    cursor.execute("SELECT pid, name, price, stock FROM products")
+    products = cursor.fetchall()
+
+    return render_template("update_product.html", products=products)
+
+
+# ===========================
+# DELETE PRODUCT
+# ===========================
+
+@app.route("/delete_product", methods=["GET", "POST"])
+def delete_product():
+
+    if "admin" not in session:
+        return redirect("/admin")
+
+    if request.method == "POST":
+
+        pid = request.form["pid"]
+
+        cursor.execute(
+            "DELETE FROM products WHERE pid=%s",
+            (pid,)
+        )
+
+        conn.commit()
+
+        return redirect("/dashboard")
+
+    cursor.execute("SELECT pid, name, price, stock FROM products")
+    products = cursor.fetchall()
+
+    return render_template("delete_product.html", products=products)    
+
+# ===============================
+# update status
+# ===============================
 @app.route("/update_status/<int:order_id>", methods=["POST"])
 def update_status(order_id):
 
