@@ -424,14 +424,14 @@ Through this project, we learned:
 
 ## 👨‍💻 Developed By
 
-**Tejas Shinde**
-**Anish Shelar**
-**Avishkar Shendage**
-**Samarth Mitkari**
-**Shivraj Sable**
-**Aadity Gawali**
+- **Tejas Shinde**
+- **Anish Shelar**
+- **Avishkar Shendage**
+- **Samarth Mitkari**
+- **Shivraj Sable**
+- **Aadity Gawali**
 
-**Diploma in Computer Technology**
+**Diploma in Computer Technology**  
 **Government Polytechnic Pen**
 
 -------------------------------------------------------------------------------------------------------------------------------------
